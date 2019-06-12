@@ -187,10 +187,46 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
                         setActualInput(new ItemStack(TFCItems.clayBall, 5, 1));
                     }
                 }
-                else // If not clay (aka Leather or stone) add the recipe without a 'dark' texture in place.
+                else if (inStack.getItem() == TFCItems.flatRock) 
                 {
-                    if (inStack.getItem() == TFCItems.flatLeather) setActualInput(new ItemStack(TFCItems.leather));
-                    else if (inStack.getItem() == TFCItems.flatRock) setActualInput(new ItemStack(TFCItems.looseRock, 1, inStack.getItemDamage()));
+                	setActualInput(new ItemStack(TFCItems.looseRock, 1, inStack.getItemDamage()));
+                }
+                else
+                {
+					ItemLeather[] clothtypes = new ItemLeather[] { 
+							(ItemLeather) TFCItems.woolCloth,
+							(ItemLeather) TFCItems.silkCloth,
+							(ItemLeather) TFCItems.linenCloth,
+							(ItemLeather) TFCItems.leather,
+							(ItemLeather) TFCItems.wolfFur,
+							(ItemLeather) TFCItems.bearFur,
+					};
+					for( ItemLeather cloth : clothtypes )
+					{
+						if( inStack.getItem() == cloth.getSpecialCraftingType())
+						{
+							if( cloth.getHasSizes() )
+							{
+								//gen size permutations, not that you'd ever use a large....
+								ItemStack[] sizes = new ItemStack[] { 
+									new ItemStack(cloth, 1, 0),
+									new ItemStack(cloth, 1, 1),
+									new ItemStack(cloth, 1, 2)
+								};
+
+								setActualInput(sizes);
+
+							}
+							else
+							{
+								//Just the one
+								setActualInput(new ItemStack(cloth));
+							}
+							
+							break;
+						}
+						
+					}
                 }
                 break;
             }
@@ -219,12 +255,18 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
         @Override
         public PositionedStack getOtherStack()
         {
+        	actualInput.setPermutationToRender(cycleticks / 24 % actualInput.items.length);
+
             return actualInput;
         }
 
         public void setActualInput(ItemStack itemStack)
         {
             actualInput = new PositionedStack(itemStack, 123, 10);
+        }
+        public void setActualInput(ItemStack[] altItemStack)
+        {
+            actualInput = new PositionedStack(altItemStack, 123, 10, true);
         }
     }
 }
