@@ -50,13 +50,14 @@ import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
  */
 public class ClientProxy extends CommonProxy
 {
-    boolean anvil, quern, kiln, loom, knapping, barrel, alloy, heat;
+    boolean anvil, quern, kiln, loom, knapping, clothing, barrel, alloy, heat;
 
     private final AnvilRecipeHandler anvilRecipeHandler = new AnvilRecipeHandler();
     private final QuernRecipeHandler quernRecipeHandler = new QuernRecipeHandler();
     private final KilnRecipeHandler kilnRecipeHandler = new KilnRecipeHandler();
     private final LoomRecipeHandler loomRecipeHandler = new LoomRecipeHandler();
     private final KnappingRecipeHandler knappingRecipeHandler = new KnappingRecipeHandler();
+    private final ClothingRecipeHandler clothingRecipeHandler = new ClothingRecipeHandler();
     private final BarrelRecipeHandler barrelRecipeHandler = new BarrelRecipeHandler();
     private final AlloyRecipeHandler alloyRecipeHandler = new AlloyRecipeHandler();
     private final HeatRecipeHandler heatRecipeHandler = new HeatRecipeHandler();
@@ -73,6 +74,7 @@ public class ClientProxy extends CommonProxy
         kiln = cfg.getBoolean("kiln", CATEGORY_GENERAL, true, "");
         loom = cfg.getBoolean("loom", CATEGORY_GENERAL, true, "");
         knapping = cfg.getBoolean("knapping", CATEGORY_GENERAL, true, "");
+        clothing = cfg.getBoolean("clothing", CATEGORY_GENERAL, true, "");
         barrel = cfg.getBoolean("barrel", CATEGORY_GENERAL, true, "");
         alloy = cfg.getBoolean("alloy", CATEGORY_GENERAL, true, "");
         heat = cfg.getBoolean("heat", CATEGORY_GENERAL, true, "");
@@ -128,6 +130,16 @@ public class ClientProxy extends CommonProxy
         {
             GuiCraftingRecipe.craftinghandlers.remove(knappingRecipeHandler);
             GuiUsageRecipe.usagehandlers.remove(knappingRecipeHandler);
+        }
+        if (clothing)
+        {
+            API.registerRecipeHandler(clothingRecipeHandler);
+            API.registerUsageHandler(clothingRecipeHandler);
+        }
+        else
+        {
+            GuiCraftingRecipe.craftinghandlers.remove(clothingRecipeHandler);
+            GuiUsageRecipe.usagehandlers.remove(clothingRecipeHandler);
         }
         if (barrel)
         {

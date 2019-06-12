@@ -38,13 +38,13 @@ package net.dries007.tfcnei.recipeHandlers;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.bioxx.tfc.Core.Metal.Alloy;
-import com.bioxx.tfc.Core.Metal.AlloyManager;
-import com.bioxx.tfc.Core.Metal.AlloyMetal;
-import com.bioxx.tfc.Core.Metal.AlloyMetalCompare;
-import com.bioxx.tfc.Items.ItemOre;
-import com.bioxx.tfc.api.Metal;
-import com.bioxx.tfc.api.TFCItems;
+import com.dunk.tfc.Core.Metal.Alloy;
+import com.dunk.tfc.Core.Metal.AlloyManager;
+import com.dunk.tfc.Core.Metal.AlloyMetal;
+import com.dunk.tfc.Core.Metal.AlloyMetalCompare;
+import com.dunk.tfc.Items.ItemOre;
+import com.dunk.tfc.api.Metal;
+import com.dunk.tfc.api.TFCItems;
 import com.google.common.collect.HashMultimap;
 import net.dries007.tfcnei.util.Constants;
 import net.dries007.tfcnei.util.Helper;
@@ -124,7 +124,7 @@ public class AlloyRecipeHandler extends TemplateRecipeHandler
         {
             for (AlloyMetal alloyMetal : recipe.alloyIngred)
             {
-                if (alloyMetal.metalType.meltedItem == ingredient.getItem() || alloyMetal.metalType.ingot == ingredient.getItem()) arecipes.add(new CachedAlloyRecipe(recipe));
+                if (alloyMetal.metalType.ingot == ingredient.getItem()) arecipes.add(new CachedAlloyRecipe(recipe));
                 else if (ingredient.getItem() instanceof ItemOre && ((ItemOre) ingredient.getItem()).getMetalType(ingredient) == alloyMetal.metalType) arecipes.add(new CachedAlloyRecipe(recipe));
             }
         }
@@ -135,7 +135,7 @@ public class AlloyRecipeHandler extends TemplateRecipeHandler
     {
         for (Alloy recipe : alloyList)
         {
-            if (recipe.outputType.ingot == result.getItem() || recipe.outputType.meltedItem == result.getItem()) arecipes.add(new CachedAlloyRecipe(recipe));
+            if (recipe.outputType.ingot == result.getItem()) arecipes.add(new CachedAlloyRecipe(recipe));
         }
     }
 
@@ -159,12 +159,11 @@ public class AlloyRecipeHandler extends TemplateRecipeHandler
 
         public CachedAlloyRecipe(Alloy recipe)
         {
-            outItem = new PositionedStack(new ItemStack(recipe.outputType.meltedItem), 10, 10);
+            outItem = new PositionedStack(new ItemStack(recipe.outputType.ingot), 10, 10);
             int x = SPACING / 2;
             for (AlloyMetal alloyMetal : recipe.alloyIngred)
             {
                 List<ItemStack> list = new LinkedList<>();
-                list.add(new ItemStack(alloyMetal.metalType.meltedItem));
                 list.add(new ItemStack(alloyMetal.metalType.ingot));
                 list.addAll(metalItemMap.get(alloyMetal.metalType));
                 ingredients.add(new PositionedStack(list, x += SPACING, 10));

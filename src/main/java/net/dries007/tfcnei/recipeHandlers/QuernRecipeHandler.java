@@ -38,10 +38,10 @@ package net.dries007.tfcnei.recipeHandlers;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.bioxx.tfc.Reference;
-import com.bioxx.tfc.api.Crafting.QuernManager;
-import com.bioxx.tfc.api.Crafting.QuernRecipe;
-import com.bioxx.tfc.api.TFCItems;
+import com.dunk.tfc.Reference;
+import com.dunk.tfc.api.Crafting.QuernManager;
+import com.dunk.tfc.api.Crafting.QuernRecipe;
+import com.dunk.tfc.api.TFCItems;
 import net.dries007.tfcnei.util.Helper;
 import net.minecraft.item.ItemStack;
 

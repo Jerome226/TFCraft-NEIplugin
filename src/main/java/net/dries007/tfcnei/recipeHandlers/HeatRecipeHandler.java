@@ -38,14 +38,14 @@ package net.dries007.tfcnei.recipeHandlers;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.bioxx.tfc.Containers.Slots.SlotCookableFoodOnly;
-import com.bioxx.tfc.Containers.Slots.SlotFirepitIn;
-import com.bioxx.tfc.Core.TFC_Core;
-import com.bioxx.tfc.Food.ItemFoodTFC;
-import com.bioxx.tfc.Items.ItemMeltedMetal;
-import com.bioxx.tfc.Items.ItemOre;
-import com.bioxx.tfc.api.*;
-import com.bioxx.tfc.api.Interfaces.ISmeltable;
+import com.dunk.tfc.Containers.Slots.SlotCookableFoodOnly;
+import com.dunk.tfc.Containers.Slots.SlotFirepitIn;
+import com.dunk.tfc.Core.TFC_Core;
+import com.dunk.tfc.Food.ItemFoodTFC;
+import com.dunk.tfc.Items.ItemMeltedMetal;
+import com.dunk.tfc.Items.ItemOre;
+import com.dunk.tfc.api.*;
+import com.dunk.tfc.api.Interfaces.ISmeltable;
 import net.dries007.tfcnei.util.Constants;
 import net.dries007.tfcnei.util.Helper;
 import net.minecraft.client.Minecraft;
@@ -208,7 +208,7 @@ public class HeatRecipeHandler extends TemplateRecipeHandler
             if (ingred.getItem() instanceof ISmeltable)
             {
                 ISmeltable smelt = (ISmeltable)ingred.getItem();
-                ItemStack smeltedItem = new ItemStack(smelt.getMetalType(ingred).meltedItem);
+                ItemStack smeltedItem = new ItemStack(smelt.getMetalType(ingred).ingot);
                 int units = smelt.getMetalReturnAmount(ingred);
                 smeltedItem.stackSize = units / 100;
                 return smeltedItem;

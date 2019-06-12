@@ -13,8 +13,8 @@
     "logoFile": "",
     "screenshots": [],
     "parent": "",
-    "requiredMods": [ "Forge", "terrafirmacraft", "NotEnoughItems"],
-    "dependencies": [ "terrafirmacraft" , "NotEnoughItems"],
+    "requiredMods": [ "Forge", "terrafirmacraftplus", "NotEnoughItems"],
+    "dependencies": [ "terrafirmacraftplus" , "NotEnoughItems"],
     "dependants": [ ],
     "useDependencyInformation": true
   }]

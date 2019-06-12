@@ -38,8 +38,8 @@ package net.dries007.tfcnei.recipeHandlers;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
-import com.bioxx.tfc.api.Crafting.KilnCraftingManager;
-import com.bioxx.tfc.api.Crafting.KilnRecipe;
+import com.dunk.tfc.api.Crafting.KilnCraftingManager;
+import com.dunk.tfc.api.Crafting.KilnRecipe;
 import net.dries007.tfcnei.util.Constants;
 import net.dries007.tfcnei.util.Helper;
 import net.minecraft.init.Blocks;
