@@ -79,7 +79,6 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
         return "knapping";
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public TemplateRecipeHandler newInstance()
     {
@@ -255,7 +254,9 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
         @Override
         public PositionedStack getOtherStack()
         {
-        	actualInput.setPermutationToRender(cycleticks / 24 % actualInput.items.length);
+            if (actualInput != null) {
+                actualInput.setPermutationToRender(cycleticks / 24 % actualInput.items.length);
+            }
 
             return actualInput;
         }
