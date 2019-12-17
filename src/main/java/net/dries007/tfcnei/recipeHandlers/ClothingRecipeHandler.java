@@ -125,7 +125,12 @@ public class ClothingRecipeHandler extends TemplateRecipeHandler
     {
         for (SewingRecipe recipe : recipeList)
         {
-            if (Helper.areItemStacksEqual(result, recipe.getSewingPattern().getOutput())) arecipes.add(new CachedSewingRecipe(recipe));
+        	// Don't add repair recipes!
+        	if (recipe.getRepairRecipe()) continue;
+
+            if (Helper.areItemStacksEqual(result, recipe.getSewingPattern().getOutput(recipe, new ItemStack[] {}))) {
+            	arecipes.add(new CachedSewingRecipe(recipe));
+            }
         }
     }
 
@@ -167,7 +172,7 @@ public class ClothingRecipeHandler extends TemplateRecipeHandler
             		j = 1;
             	}
             }
-            this.result = new PositionedStack(recipe.getSewingPattern().getOutput(), x0+90, y0+9);
+            this.result = new PositionedStack(recipe.getSewingPattern().getOutput(recipe, inputItems), x0+90, y0+9);
             ItemStack[] needles = new ItemStack[] { 
             		new ItemStack(TFCItems.boneNeedleStrung), 
             		new ItemStack(TFCItems.ironNeedleStrung)

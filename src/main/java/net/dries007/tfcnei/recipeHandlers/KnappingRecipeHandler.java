@@ -38,6 +38,8 @@ package net.dries007.tfcnei.recipeHandlers;
 
 import codechicken.nei.PositionedStack;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+
+import com.dunk.tfc.Items.ItemClothingPiece;
 import com.dunk.tfc.Items.ItemFlatGeneric;
 import com.dunk.tfc.Items.ItemLeather;
 import com.dunk.tfc.Items.ItemLooseRock;
@@ -60,6 +62,7 @@ import java.util.List;
 public class KnappingRecipeHandler extends TemplateRecipeHandler
 {
     private static List<ShapedRecipesTFC> recipeList;
+    private static List<ItemLeather> clothItems;
 
     @Override
     public String getGuiTexture()
@@ -78,23 +81,31 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
     {
         return "knapping";
     }
+    
 
     @Override
     public TemplateRecipeHandler newInstance()
     {
         if (recipeList == null)
         {
+        	clothItems = new ArrayList<ItemLeather>();
+			for(Object io : Item.itemRegistry) {
+				if (ItemLeather.class.isInstance(io)) {
+					clothItems.add((ItemLeather)io);
+				}
+			}
             recipeList = new ArrayList<>();
             List<IRecipe> allRecipes = CraftingManagerTFC.getInstance().getRecipeList();
             for (IRecipe recipe : allRecipes)
                 if (recipe.getRecipeSize() > 9 && recipe instanceof ShapedRecipesTFC) // Filter out junk for optimisation. All knapping recipes are > 9 and are shaped
                 {
-                    ItemStack[] inputs = ((ShapedRecipesTFC) recipe).getRecipeItems(); // Get inputs
+                	ShapedRecipesTFC recipeTFC = (ShapedRecipesTFC)recipe; 
+                    ItemStack[] inputs = recipeTFC.getRecipeItems(); // Get inputs
                     for (ItemStack inStack : inputs)
                     {
                         if (inStack == null) continue; // Loop over until we find a not null entry
                         if (!(inStack.getItem() instanceof ItemFlatGeneric)) break; // If its not a flat type item, break out now
-                        recipeList.add((ShapedRecipesTFC) recipe);
+                        recipeList.add(recipeTFC);
                         break;
                     }
                 }
@@ -137,8 +148,23 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
     @Override
     public void loadUsageRecipes(ItemStack ingredient)
     {
-        if (!(ingredient.getItem() instanceof ItemLooseRock)) return;
-        Item flatType = ((ItemLooseRock) ingredient.getItem()).getSpecialCraftingType();
+        Item ingItem = ingredient.getItem();
+    	Item flatType = null; 
+    	if ((ingItem instanceof ItemLooseRock)) {
+    		flatType = ((ItemLooseRock) ingItem).getSpecialCraftingType();	
+        } else {
+        	for (ItemLeather cloth : clothItems) {
+				if( ingItem == cloth) {
+					flatType = cloth.getSpecialCraftingType();
+					break;
+				} else if( ingItem == cloth.getSpecialCraftingType()) {
+					flatType = ingItem;
+					break;
+				}
+        	}
+        } 
+    	if (flatType == null) return;
+        
         for (ShapedRecipesTFC recipe : recipeList)
         {
             for (ItemStack inStack : recipe.getRecipeItems())
@@ -151,8 +177,12 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
                     else if (ingredient.getItemDamage() == 1 && inStack.getItemDamage() == 3) // Compare to see if the ingredient is fire clay
                         arecipes.add(new CachedKnappingRecipe(recipe));
                 }
-                else if (inStack.getItemDamage() == Short.MAX_VALUE || ingredient.getItemDamage() == inStack.getItemDamage())  // In this case match damage value of stone too.
-                    arecipes.add(new CachedKnappingRecipe(recipe));
+                else if (inStack.getItemDamage() == Short.MAX_VALUE || ingredient.getItemDamage() == inStack.getItemDamage()) {
+                	// In this case match damage value of stone too.
+                	arecipes.add(new CachedKnappingRecipe(recipe));
+                }
+                    
+
                 break;
             }
         }
@@ -192,16 +222,7 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
                 }
                 else
                 {
-					ItemLeather[] clothtypes = new ItemLeather[] { 
-							(ItemLeather) TFCItems.woolCloth,
-							(ItemLeather) TFCItems.silkCloth,
-							(ItemLeather) TFCItems.linenCloth,
-							(ItemLeather) TFCItems.leather,
-							(ItemLeather) TFCItems.wolfFur,
-							(ItemLeather) TFCItems.bearFur,
-					};
-					for( ItemLeather cloth : clothtypes )
-					{
+					for (ItemLeather cloth : clothItems) {
 						if( inStack.getItem() == cloth.getSpecialCraftingType())
 						{
 							if( cloth.getHasSizes() )
