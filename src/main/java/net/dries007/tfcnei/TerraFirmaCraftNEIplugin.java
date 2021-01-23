@@ -56,7 +56,7 @@ import static net.dries007.tfcnei.util.Constants.MODID;
 /**
  * @author Dries007
  */
-@Mod(modid = MODID, guiFactory = "net.dries007.tfcnei.gui.ModGuiFactory")
+@Mod(modid = MODID, guiFactory = "net.dries007.tfcnei.gui.ModGuiFactory", useMetadata = true)
 public class TerraFirmaCraftNEIplugin
 {
     public static Logger log;
