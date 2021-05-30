@@ -257,7 +257,11 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
             this.minTechLevel = recipe.getMinTechLevel();
             this.sealTime = (recipe.isSealedRecipe()) ? recipe.getSealTime() : 0;
             this.inFluid = recipe.getInFluid();
-            this.outFluid = recipe.getRecipeOutFluid();
+            // this is handled in com.dunk.tfc.TileEntities.TEBarrel line 1337. for non distillation recipes, equal input/output fluids means the fluid is subtracted
+            if(!(recipe instanceof BarrelFireRecipe && ((BarrelFireRecipe) recipe).isDistillationRecipe()) && recipe.isRemovesLiquid() && recipe.getInFluid().isFluidEqual(recipe.getRecipeOutFluid()))
+            	this.outFluid = null;
+            else
+            	this.outFluid = recipe.getRecipeOutFluid();
             setInItem(recipe.getInItem());
             setOutItem(recipe.getRecipeOutIS());
 
