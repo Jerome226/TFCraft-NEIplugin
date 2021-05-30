@@ -9,3 +9,12 @@ out
 *.json
 run
 /bin/
+.classpath
+.project
+.settings/
+*.bmp
+asm/
+config/
+logs/
+options.txt
+saves/
