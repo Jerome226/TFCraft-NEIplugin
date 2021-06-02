@@ -18,3 +18,4 @@ config/
 logs/
 options.txt
 saves/
+crash-reports/
