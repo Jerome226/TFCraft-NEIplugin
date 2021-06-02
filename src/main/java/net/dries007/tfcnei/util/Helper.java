@@ -43,11 +43,14 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.opengl.GL11;
+
+import com.dunk.tfc.Reference;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -120,6 +123,12 @@ public class Helper
         int color = fluid.getColor();
         GL11.glColor4ub((byte) ((color >> 16) & 255), (byte) ((color >> 8) & 255), (byte) (color & 255), (byte) (0xaa & 255));
         gui.drawTexturedModelRectFromIcon(rect.x, rect.y, fluidIcon, rect.width, rect.height);
+    }
+    
+    public static void drawTexture(ResourceLocation location, int x, int y) {
+    	GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+        gui.drawTexturedModalRect(x, y, 0, 0, 256, 256);
     }
 
     public static String tooltipForFluid(FluidStack fluidStack)

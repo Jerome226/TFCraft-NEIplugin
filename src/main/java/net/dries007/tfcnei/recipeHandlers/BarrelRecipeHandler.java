@@ -51,6 +51,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.FluidStack;
 
 import java.awt.*;
@@ -166,10 +167,16 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
         if (crecipe instanceof CachedBarrelRecipe)
         {
             Helper.drawCenteredString(Minecraft.getMinecraft().fontRenderer, ((CachedBarrelRecipe) crecipe).techLvlString(), 83, 8, 0x820093);
-            Helper.drawCenteredString(Minecraft.getMinecraft().fontRenderer, ((CachedBarrelRecipe) crecipe).sealTimeString(), 83, 48, 0x555555);
+            Helper.drawCenteredString(Minecraft.getMinecraft().fontRenderer, ((CachedBarrelRecipe) crecipe).sealTimeString(), 83, 49, 0x555555);
 
             if (((CachedBarrelRecipe) crecipe).getInFluid() != null) Helper.drawFluidInRect(((CachedBarrelRecipe) crecipe).getInFluid().getFluid(), recipeInFluidRect());
             if (((CachedBarrelRecipe) crecipe).getOutFluid() != null) Helper.drawFluidInRect(((CachedBarrelRecipe) crecipe).getOutFluid().getFluid(), recipeOutFluidRect());
+            if (((CachedBarrelRecipe) crecipe).isDistillationRecipe){
+            	Helper.drawTexture(new ResourceLocation(Constants.MODID.toLowerCase(),"textures/gui/Still_Background.png"), 65, 16);
+            }
+            else if(((CachedBarrelRecipe) crecipe).isFireRecipe){
+            	Helper.drawTexture(new ResourceLocation(Constants.MODID.toLowerCase(),"textures/gui/Mounted_Large_Vessel_Background.png"), 65, 16);
+            }
         }
     }
 
@@ -251,6 +258,9 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
         PositionedStack inItem, outItem;
         final FluidStack inFluid;
         FluidStack outFluid;
+        boolean isDistillationRecipe = false;
+        boolean isFireRecipe = false;
+        int fireTicks = 0;
 
         public CachedBarrelRecipe(BarrelRecipe recipe)
         {
@@ -258,7 +268,7 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
             this.sealTime = (recipe.isSealedRecipe()) ? recipe.getSealTime() : 0;
             this.inFluid = recipe.getInFluid();
             // this is handled in com.dunk.tfc.TileEntities.TEBarrel line 1337. for non distillation recipes, equal input/output fluids means the fluid is subtracted
-            if(!(recipe instanceof BarrelFireRecipe && ((BarrelFireRecipe) recipe).isDistillationRecipe()) && recipe.isRemovesLiquid() && recipe.getInFluid().isFluidEqual(recipe.getRecipeOutFluid()))
+            if(recipe.isRemovesLiquid() && recipe.getInFluid().isFluidEqual(recipe.getRecipeOutFluid()))
             	this.outFluid = null;
             else
             	this.outFluid = recipe.getRecipeOutFluid();
@@ -273,6 +283,12 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
                 this.outFluid = null;
                 setInItem(foodToBrine);
                 setOutItem(foodToBrine);
+            }
+            if (recipe instanceof BarrelFireRecipe) {
+            	isFireRecipe = true;
+            	BarrelFireRecipe fireRecipe = (BarrelFireRecipe)recipe;
+            	fireTicks = fireRecipe.getFireTicksRequired(inFluid, recipe.getInItem());
+            	isDistillationRecipe = fireRecipe.isDistillationRecipe();
             }
         }
 
@@ -312,12 +328,19 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
 
         public String sealTimeString()
         {
-            if (sealTime == 0) return "Instant";
-            else return sealTime + " hours";
+            
+            if (sealTime != 0)
+            	return sealTime + " hours";
+            else if(fireTicks != 0)
+            	//return fireTicks + " ticks";
+            	return String.format("%.02f", fireTicks/1000.0)+ " hours";
+            return "Instant";
         }
 
         public String techLvlString()
         {
+        	if(isFireRecipe)
+        		return "Vessel only";
             switch (minTechLevel)
             {
                 case 0:
