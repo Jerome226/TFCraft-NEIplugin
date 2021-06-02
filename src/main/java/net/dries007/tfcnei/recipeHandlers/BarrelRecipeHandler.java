@@ -265,7 +265,7 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
         public CachedBarrelRecipe(BarrelRecipe recipe)
         {
             this.minTechLevel = recipe.getMinTechLevel();
-            this.sealTime = (recipe.isSealedRecipe()) ? recipe.getSealTime() : 0;
+            this.sealTime = recipe.getSealTime();
             this.inFluid = recipe.getInFluid();
             // this is handled in com.dunk.tfc.TileEntities.TEBarrel line 1337. for non distillation recipes, equal input/output fluids means the fluid is subtracted
             if(recipe.isRemovesLiquid() && recipe.getInFluid().isFluidEqual(recipe.getRecipeOutFluid()))
@@ -277,7 +277,7 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
 
             if (recipe instanceof BarrelLiquidToLiquidRecipe) setInItem(getItemStacksForFluid(((BarrelLiquidToLiquidRecipe) recipe).getInputfluid()));
             if (recipe instanceof BarrelMultiItemRecipe) this.outFluid = null;
-            if (recipe instanceof BarrelVinegarRecipe) setInItem(fruitForVinegar);
+            if (recipe instanceof BarrelVinegarRecipe) //setInItem(fruitForVinegar);
             if (recipe instanceof BarrelBriningRecipe)
             {
                 this.outFluid = null;
@@ -328,12 +328,14 @@ public class BarrelRecipeHandler extends TemplateRecipeHandler
 
         public String sealTimeString()
         {
-            
-            if (sealTime != 0)
-            	return sealTime + " hours";
-            else if(fireTicks != 0)
-            	//return fireTicks + " ticks";
+        	if(fireTicks != 0) {
+        		float fireHours = fireTicks/1000.0f;
+        		if(fireHours == (int) fireHours)
+        	        return (int) fireHours + " hours";
             	return String.format("%.02f", fireTicks/1000.0)+ " hours";
+            }
+        	else if (sealTime != 0)
+            	return sealTime + " hours";
             return "Instant";
         }
 
