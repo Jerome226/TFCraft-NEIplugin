@@ -177,12 +177,15 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
                     else if (ingredient.getItemDamage() == 1 && inStack.getItemDamage() == 3) // Compare to see if the ingredient is fire clay
                         arecipes.add(new CachedKnappingRecipe(recipe));
                 }
+                
+                else if(ingItem instanceof ItemLeather) {
+                	//in the case of hides we want everything
+                	arecipes.add(new CachedKnappingRecipe(recipe));
+                }
                 else if (inStack.getItemDamage() == Short.MAX_VALUE || ingredient.getItemDamage() == inStack.getItemDamage()) {
                 	// In this case match damage value of stone too.
                 	arecipes.add(new CachedKnappingRecipe(recipe));
                 }
-                    
-
                 break;
             }
         }
@@ -263,7 +266,7 @@ public class KnappingRecipeHandler extends TemplateRecipeHandler
         @Override
         public List<PositionedStack> getIngredients()
         {
-            return inputs;
+        	return inputs;
         }
 
         @Override
