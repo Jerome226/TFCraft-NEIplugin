@@ -50,7 +50,7 @@ import static net.minecraftforge.common.config.Configuration.CATEGORY_GENERAL;
  */
 public class ClientProxy extends CommonProxy
 {
-    boolean anvil, quern, kiln, loom, knapping, clothing, barrel, alloy, heat;
+    boolean anvil, quern, kiln, loom, knapping, clothing, barrel, alloy, heat, press;
 
     private final AnvilRecipeHandler anvilRecipeHandler = new AnvilRecipeHandler();
     private final QuernRecipeHandler quernRecipeHandler = new QuernRecipeHandler();
@@ -61,6 +61,7 @@ public class ClientProxy extends CommonProxy
     private final BarrelRecipeHandler barrelRecipeHandler = new BarrelRecipeHandler();
     private final AlloyRecipeHandler alloyRecipeHandler = new AlloyRecipeHandler();
     private final HeatRecipeHandler heatRecipeHandler = new HeatRecipeHandler();
+    private final PressRecipeHandler pressRecipeHandler = new PressRecipeHandler();
 
     @Override
     public void config(Configuration cfg)
@@ -78,6 +79,7 @@ public class ClientProxy extends CommonProxy
         barrel = cfg.getBoolean("barrel", CATEGORY_GENERAL, true, "");
         alloy = cfg.getBoolean("alloy", CATEGORY_GENERAL, true, "");
         heat = cfg.getBoolean("heat", CATEGORY_GENERAL, true, "");
+        press = cfg.getBoolean("press", CATEGORY_GENERAL, true, "");
 
         API.registerNEIGuiHandler(new NEIGuiHandler());
 
@@ -170,6 +172,16 @@ public class ClientProxy extends CommonProxy
         {
             GuiCraftingRecipe.craftinghandlers.remove(heatRecipeHandler);
             GuiUsageRecipe.usagehandlers.remove(heatRecipeHandler);
+        }
+        if (press)
+        {
+            API.registerRecipeHandler(pressRecipeHandler);
+            API.registerUsageHandler(pressRecipeHandler);
+        }
+        else
+        {
+            GuiCraftingRecipe.craftinghandlers.remove(pressRecipeHandler);
+            GuiUsageRecipe.usagehandlers.remove(pressRecipeHandler);
         }
     }
 }
